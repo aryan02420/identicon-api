@@ -1,0 +1,33 @@
+<h1 id="identicon-api">Identicon API</h1>
+<p>This project stemmed from the need to include dynamic, default
+identicons for new users of <a href="http://unum.la/">UNUM</a>. I was
+inspired by the amazing work of <a
+href="https://github.com/dmester/jdenticon">jdenticon</a>, a javascript
+module that allowed the generating of identicons. This project provides
+a simple interface to that project.</p>
+<h2 id="use">Use</h2>
+<p>I strived to make the API as easy to use as possible. Use can look
+like so:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;https://identicon-api.herokuapp.com/</span><span class="er">&lt;</span><span class="st">username&gt;/</span><span class="er">&lt;</span><span class="st">size&gt;?format=(svg|png)&quot;</span> <span class="er">alt</span><span class="ot">=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></span></code></pre></div>
+<ul>
+<li><code>username</code>: This doesn’t have to be a username, just any
+string. Hashing is done server-side using SHA-256.</li>
+<li><code>size</code>: This is the size of the image you would like
+returned. For now, the API only returns squares, so <code>size</code> is
+any natural number.</li>
+<li><code>format</code>: This is the format you would like the image
+returned in, svg or png. (Default: svg)</li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<p>I’d love for you to contribute to the project! Go ahead and submit a
+pull request and I’ll be sure to take a look at it. Here are some ideas
+to get you started:</p>
+<ul>
+<li>Support for more diverse sizes, though this will have to be through
+changes to the <a
+href="https://github.com/dmester/jdenticon">dmester/jdenticon</a>
+repo</li>
+<li>Support for different hash functions, specified through the Request
+body</li>
+</ul>
