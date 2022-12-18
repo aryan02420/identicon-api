@@ -1,2 +1,2 @@
-index.html:	README.md
-	pandoc README.md -o index.html
+index.html:	README.md Makefile
+	pandoc README.md -s -o index.html
