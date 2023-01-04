@@ -60,13 +60,23 @@ router.get("/", async (ctx) => {
 
 router.get("/:username/:size", (ctx) => {
   const configString = ctx.request.url.searchParams.get("config");
-  const imgBuf = jdenticon.toPng(
-    ctx.params.username,
-    getImageSize(ctx.params.size),
-    getJdenticonConfigFromString(configString),
-  );
+  const format = ctx.request.url.searchParams.get("format");
+
+  const hash = ctx.params.username;
+  const size = getImageSize(ctx.params.size);
+  const config = getJdenticonConfigFromString(configString);
+
+  if (format === "png") {
+    const imgBuf = jdenticon.toPng(hash, size, config);
+    ctx.response.body = imgBuf;
+    ctx.response.headers.set("Content-Type", "image/png");
+    return;
+  }
+  
+  const imgBuf = jdenticon.toSvg(hash, size, config);
   ctx.response.body = imgBuf;
-  ctx.response.headers.set("Content-Type", "image/png");
+  ctx.response.headers.set("Content-Type", "image/svg+xml");
+  return;
 });
 
 app.use(router.routes());
