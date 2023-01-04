@@ -2,20 +2,20 @@ import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 import * as jdenticon from "npm:jdenticon";
 
 function getImageSize(sizeString: string) {
-  const size = parseInt(sizeString)
+  const size = parseInt(sizeString);
   if (Number.isNaN(size)) {
-    return 200
+    return 200;
   }
-  return Math.min(Math.max(8, size), 2048)
+  return Math.min(Math.max(8, size), 2048);
 }
 
 function getJdenticonConfigFromString(
   configString: string | null,
 ): jdenticon.JdenticonConfig {
-  if (configString === null) {
-    return {};
-  }
-  if (!/^([a-z0-9]{24})$/i.test(configString)) {
+  if (
+    configString === null ||
+    !/^([a-z0-9]{24})$/i.test(configString)
+  ) {
     return {};
   }
   const configParts = {
@@ -72,7 +72,7 @@ router.get("/:username/:size", (ctx) => {
     ctx.response.headers.set("Content-Type", "image/png");
     return;
   }
-  
+
   const imgBuf = jdenticon.toSvg(hash, size, config);
   ctx.response.body = imgBuf;
   ctx.response.headers.set("Content-Type", "image/svg+xml");
