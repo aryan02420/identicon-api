@@ -1,6 +1,14 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 import * as jdenticon from "npm:jdenticon";
 
+function getImageSize(sizeString: string) {
+  const size = parseInt(sizeString)
+  if (Number.isNaN(size)) {
+    return 200
+  }
+  return Math.min(Math.max(8, size), 2048)
+}
+
 function getJdenticonConfigFromString(
   configString: string | null,
 ): jdenticon.JdenticonConfig {
@@ -54,7 +62,7 @@ router.get("/:username/:size", (ctx) => {
   const configString = ctx.request.url.searchParams.get("config");
   const imgBuf = jdenticon.toPng(
     ctx.params.username,
-    parseInt(ctx.params.size),
+    getImageSize(ctx.params.size),
     getJdenticonConfigFromString(configString),
   );
   ctx.response.body = imgBuf;
