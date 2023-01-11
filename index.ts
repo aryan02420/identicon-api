@@ -1,6 +1,16 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 import * as jdenticon from "npm:jdenticon";
 
+async function getHash(str: string) {
+  const data = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashString = hashArray.map((b) => {
+    return b.toString(16).padStart(2, "0");
+  }).join("");
+  return hashString;
+}
+
 function getImageSize(sizeString: string) {
   const size = parseInt(sizeString);
   if (Number.isNaN(size)) {
@@ -58,11 +68,11 @@ router.get("/", async (ctx) => {
   await send(ctx, "index.html");
 });
 
-router.get("/:username/:size", (ctx) => {
+router.get("/:username/:size", async (ctx) => {
   const configString = ctx.request.url.searchParams.get("config");
   const format = ctx.request.url.searchParams.get("format");
 
-  const hash = ctx.params.username;
+  const hash = await getHash(ctx.params.username);
   const size = getImageSize(ctx.params.size);
   const config = getJdenticonConfigFromString(configString);
 
