@@ -4,12 +4,9 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>README</title>
+  <title>Identicon API | README</title>
   <style>
     html {
-      line-height: 1.5;
-      font-family: Georgia, serif;
-      font-size: 20px;
       color: #1a1a1a;
       background-color: #fdfdfd;
     }
@@ -28,13 +25,16 @@
     @media (max-width: 600px) {
       body {
         font-size: 0.9em;
-        padding: 1em;
+        padding: 12px;
       }
       h1 {
         font-size: 1.8em;
       }
     }
     @media print {
+      html {
+        background-color: white;
+      }
       body {
         background-color: transparent;
         color: black;
@@ -58,6 +58,10 @@
       color: #1a1a1a;
     }
     img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
       max-width: 100%;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -84,9 +88,10 @@
       color: #606060;
     }
     code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
       font-size: 85%;
       margin: 0;
+      hyphens: manual;
     }
     pre {
       margin: 1em 0;
@@ -151,14 +156,19 @@
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -220,25 +230,29 @@
     code span.va { color: #19177c; } /* Variable */
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
+<header id="title-block-header">
+<h1 class="title">Identicon API | README</h1>
+</header>
 <h1 id="identicon-api">Identicon API</h1>
-<p>This project stemmed from the need to include dynamic, default
-identicons for new users of <a href="http://unum.la/">UNUM</a>. I was
-inspired by the amazing work of <a
+<p>This project is forked from <a
+href="https://github.com/aarohmankad/identicon-api">aarohmankad/identicon-api</a>
+which stemmed from the need to include dynamic, default identicons for
+new users of <a href="http://unum.la/">UNUM</a>. It was inspired by the
+amazing work of <a
 href="https://github.com/dmester/jdenticon">jdenticon</a>, a javascript
-module that allowed the generating of identicons. This project provides
-a simple interface to that project.</p>
-<h2 id="use">Use</h2>
-<p>I strived to make the API as easy to use as possible. Use can look
-like so:</p>
+module that allowed the generating of identicons.</p>
+<p>This project is a serverless implementation of the original
+identicon-api, and is hosted on <a href="https://deno.com/deploy">Deno
+Deploy</a>.</p>
+<h2 id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;https://identicon-api.herokuapp.com/[username]/[size]?format=(svg|png)&quot;</span> <span class="er">alt</span><span class="ot">=</span><span class="st">&quot;&quot;</span><span class="kw">&gt;</span></span></code></pre></div>
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;https://identicon.02420.dev/[username]/[size]?format=(svg|png)</span><span class="er">&amp;</span><span class="st">config=&quot;</span><span class="dt">&gt;</span></span></code></pre></div>
 <ul>
 <li><code>username</code>: This doesn’t have to be a username, just any
 string. Hashing is done server-side using SHA-256.</li>
@@ -246,19 +260,21 @@ string. Hashing is done server-side using SHA-256.</li>
 returned. For now, the API only returns squares, so <code>size</code> is
 any natural number.</li>
 <li><code>format</code>: This is the format you would like the image
-returned in, svg or png. (Default: svg)</li>
+returned in, <code>svg</code> or <code>png</code>. (Default:
+<code>svg</code>)</li>
+<li><code>config</code>: This is the same config hash generated by <a
+href="https://jdenticon.com/icon-designer.html">Jdenticon Icon
+Designer</a> for generating custom icons.</li>
 </ul>
 <h2 id="contributing">Contributing</h2>
-<p>I’d love for you to contribute to the project! Go ahead and submit a
-pull request and I’ll be sure to take a look at it. Here are some ideas
-to get you started:</p>
+<p>If you would like to contribute to this project, please feel free to
+fork this repository and submit a pull request, or open an issue.</p>
+<h2 id="links">Links</h2>
 <ul>
-<li>Support for more diverse sizes, though this will have to be through
-changes to the <a
-href="https://github.com/dmester/jdenticon">dmester/jdenticon</a>
-repo</li>
-<li>Support for different hash functions, specified through the Request
-body</li>
+<li>View source code <a
+href="https://github.com/aryan02420/identicon-api">aryan02420/identicon-api</a></li>
+<li>Deployed at <a
+href="https://identicon.02420.dev">identicon.02420.dev</a></li>
 </ul>
 </body>
 </html>
