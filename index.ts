@@ -76,6 +76,9 @@ router.get("/:username/:size", async (ctx) => {
   const size = getImageSize(ctx.params.size);
   const config = getJdenticonConfigFromString(configString);
 
+  // Cache for 1 week, reuse for 1 day
+  ctx.response.headers.set("Cache-Control", "public, max-age=604800, stale-while-revalidate=86400, immutable");
+
   if (format === "png") {
     const imgBuf = jdenticon.toPng(hash, size, config);
     ctx.response.body = imgBuf;
